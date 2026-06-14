@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
-<body style="background:black;color:white;font-size:40px">
+<body style="background:black;color:white;font-size:30px">
 
 <div id="test">Loading...</div>
 
 <script>
-document.getElementById("test").innerHTML = "GitHub Pages Works";
+
+fetch('https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4424&s=2026')
+.then(response => response.json())
+.then(data => {
+    document.getElementById('test').innerHTML =
+        'Events Found: ' + data.events.length;
+})
+.catch(error => {
+    document.getElementById('test').innerHTML =
+        'ERROR: ' + error;
+});
+
 </script>
 
 </body>
