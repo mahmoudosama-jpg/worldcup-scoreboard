@@ -1,64 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>World Cup Scores</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIFA World Cup 2026</title>
+
 <style>
 body{
-    background:#111;
-    color:white;
-    font-family:Arial,sans-serif;
     margin:0;
-    padding:30px;
+    background:#0b1020;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    padding:20px;
 }
+
 h1{
     text-align:center;
+    margin-bottom:20px;
 }
+
 .match{
-    border-bottom:1px solid #444;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#18213d;
+    margin-bottom:10px;
     padding:15px;
-    font-size:28px;
+    border-radius:10px;
 }
+
+.team{
+    width:35%;
+    font-size:22px;
+}
+
+.score{
+    width:30%;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+}
+
 .status{
-    color:#00ff00;
+    font-size:14px;
+    color:#9fd3ff;
+    margin-top:5px;
+}
+
+.live{
+    color:#00ff88;
+    font-weight:bold;
+}
+
+.upcoming{
+    color:#ffc107;
+}
+
+.finished{
+    color:#bdbdbd;
 }
 </style>
 </head>
+
 <body>
 
-<h1>FIFA World Cup</h1>
+<h1>FIFA World Cup 2026</h1>
 
 <div id="matches">Loading...</div>
 
 <script>
-const API_KEY = "9625aed0a0884d6bb638ac28d415cfb5";
 
-fetch("https://api.football-data.org/v4/competitions/WC/matches",{
-    headers:{
-        "X-Auth-Token":API_KEY
-    }
-})
-.then(r=>r.json())
-.then(data=>{
+fetch('https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4424&s=2026')
+.then(response => response.json())
+.then(data => {
 
     let html='';
 
-    data.matches.slice(0,20).forEach(match=>{
+    let matches=data.events || [];
+
+    matches.sort((a,b)=>
+        new Date(b.dateEvent) - new Date(a.dateEvent)
+    );
+
+    matches.slice(0,20).forEach(match=>{
+
+        let statusClass='upcoming';
+        let status='Upcoming';
+
+        if(match.intHomeScore!==null){
+            statusClass='finished';
+            status='FT';
+        }
 
         html += `
         <div class="match">
-            ${match.homeTeam.name}
-            ${match.score.fullTime.home ?? '-'}
-            -
-            ${match.score.fullTime.away ?? '-'}
-            ${match.awayTeam.name}
-            <br>
-            <span class="status">${match.status}</span>
-        </div>`;
+
+            <div class="team">
+                ${match.strHomeTeam}
+            </div>
+
+            <div class="score">
+                ${match.intHomeScore ?? '-'}
+                :
+                ${match.intAwayScore ?? '-'}
+                <div class="status ${statusClass}">
+                    ${status}
+                </div>
+            </div>
+
+            <div class="team" style="text-align:right">
+                ${match.strAwayTeam}
+            </div>
+
+        </div>
+        `;
     });
 
-    document.getElementById("matches").innerHTML=html;
+    document.getElementById('matches').innerHTML=html;
 });
+
+setTimeout(()=>{
+ location.reload();
+},60000);
+
 </script>
 
 </body>
