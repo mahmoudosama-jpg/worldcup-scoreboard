@@ -1,21 +1,97 @@
 <!DOCTYPE html>
 <html>
-<body style="background:black;color:white;font-size:30px">
+<head>
+<meta charset="utf-8">
+<title>World Cup Scores</title>
 
-<div id="test">Loading...</div>
+<style>
+body{
+    margin:0;
+    padding:20px;
+    background:#0d1117;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.match{
+    background:#161b22;
+    margin-bottom:10px;
+    padding:15px;
+    border-radius:8px;
+}
+
+.teams{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.score{
+    font-size:32px;
+    margin-top:5px;
+}
+
+.date{
+    color:#9ca3af;
+    margin-top:5px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>FIFA World Cup 2026</h1>
+
+<div id="matches">Loading...</div>
 
 <script>
 
 fetch('https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4424&s=2026')
-.then(response => response.json())
-.then(data => {
-    document.getElementById('test').innerHTML =
-        'Events Found: ' + data.events.length;
+.then(r=>r.json())
+.then(data=>{
+
+    let html='';
+
+    data.events.forEach(match=>{
+
+        html += `
+        <div class="match">
+
+            <div class="teams">
+                ${match.strHomeTeam}
+                vs
+                ${match.strAwayTeam}
+            </div>
+
+            <div class="score">
+                ${match.intHomeScore ?? '-'}
+                :
+                ${match.intAwayScore ?? '-'}
+            </div>
+
+            <div class="date">
+                ${match.dateEvent}
+            </div>
+
+        </div>
+        `;
+    });
+
+    document.getElementById('matches').innerHTML = html;
+
 })
-.catch(error => {
-    document.getElementById('test').innerHTML =
-        'ERROR: ' + error;
+.catch(err=>{
+    document.getElementById('matches').innerHTML =
+        'Error: ' + err;
 });
+
+setTimeout(()=>{
+ location.reload();
+},60000);
 
 </script>
 
