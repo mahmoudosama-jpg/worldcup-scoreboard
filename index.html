@@ -2,98 +2,65 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>World Cup Scores</title>
+<title>World Cup</title>
 
 <style>
 body{
     margin:0;
-    padding:20px;
-    background:#0d1117;
+    background:#0b1220;
     color:white;
-    font-family:Arial,sans-serif;
+    font-family:Arial;
 }
 
-h1{
+header{
     text-align:center;
-    margin-bottom:20px;
+    padding:20px;
+    font-size:32px;
+    font-weight:bold;
+    background:#111a2e;
+}
+
+.section{
+    padding:20px;
+}
+
+h2{
+    color:#00ffcc;
 }
 
 .match{
-    background:#161b22;
-    margin-bottom:10px;
-    padding:15px;
-    border-radius:8px;
-}
-
-.teams{
-    font-size:24px;
-    font-weight:bold;
-}
-
-.score{
-    font-size:32px;
-    margin-top:5px;
-}
-
-.date{
-    color:#9ca3af;
-    margin-top:5px;
+    padding:10px;
+    border-bottom:1px solid #222;
+    font-size:22px;
 }
 </style>
 
 </head>
 <body>
 
-<h1>FIFA World Cup 2026</h1>
+<header>
+FIFA World Cup 2026 By Systems Design
+</header>
 
-<div id="matches">Loading...</div>
+<div class="section">
 
-<script>
+<h2>Live / Results</h2>
 
-fetch('https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4424&s=2026')
-.then(r=>r.json())
-.then(data=>{
+<div class="match">Brazil 1 - 1 Morocco</div>
+<div class="match">USA 4 - 1 Paraguay</div>
+<div class="match">Australia 2 - 0 Turkey</div>
 
-    let html='';
+</div>
 
-    data.events.forEach(match=>{
+<div class="section">
 
-        html += `
-        <div class="match">
+<h2>Upcoming</h2>
 
-            <div class="teams">
-                ${match.strHomeTeam}
-                vs
-                ${match.strAwayTeam}
-            </div>
+<div class="match">Germany vs Curacao</div>
+<div class="match">Netherlands vs Japan</div>
+<div class="match">Belgium vs Egypt</div>
 
-            <div class="score">
-                ${match.intHomeScore ?? '-'}
-                :
-                ${match.intAwayScore ?? '-'}
-            </div>
-
-            <div class="date">
-                ${match.dateEvent}
-            </div>
-
-        </div>
-        `;
-    });
-
-    document.getElementById('matches').innerHTML = html;
-
-})
-.catch(err=>{
-    document.getElementById('matches').innerHTML =
-        'Error: ' + err;
-});
-
-setTimeout(()=>{
- location.reload();
-},60000);
-
-</script>
+</div>
 
 </body>
 </html>
