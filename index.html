@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>World Cup Scores</title>
+<style>
+body{
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+    margin:0;
+    padding:30px;
+}
+h1{
+    text-align:center;
+}
+.match{
+    border-bottom:1px solid #444;
+    padding:15px;
+    font-size:28px;
+}
+.status{
+    color:#00ff00;
+}
+</style>
+</head>
+<body>
+
+<h1>FIFA World Cup</h1>
+
+<div id="matches">Loading...</div>
+
+<script>
+const API_KEY = "9625aed0a0884d6bb638ac28d415cfb5";
+
+fetch("https://api.football-data.org/v4/competitions/WC/matches",{
+    headers:{
+        "X-Auth-Token":API_KEY
+    }
+})
+.then(r=>r.json())
+.then(data=>{
+
+    let html='';
+
+    data.matches.slice(0,20).forEach(match=>{
+
+        html += `
+        <div class="match">
+            ${match.homeTeam.name}
+            ${match.score.fullTime.home ?? '-'}
+            -
+            ${match.score.fullTime.away ?? '-'}
+            ${match.awayTeam.name}
+            <br>
+            <span class="status">${match.status}</span>
+        </div>`;
+    });
+
+    document.getElementById("matches").innerHTML=html;
+});
+</script>
+
+</body>
+</html>
